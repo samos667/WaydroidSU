@@ -1,0 +1,23 @@
+---
+name: Build & Test (Nix DevShell)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v12
+      - name: Enter devshell and build
+        run: |-
+          nix develop --command bash -c '
+            set -e
+            cargo --version
+            make
+            ./target/release/wsu -V
+          '
